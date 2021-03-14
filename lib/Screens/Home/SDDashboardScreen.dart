@@ -6,7 +6,11 @@ import 'package:nic_ro_plant_project/Screens/Weeklysurvey.dart';
 import 'package:nic_ro_plant_project/Utils/Colors.dart';
 import 'package:nic_ro_plant_project/Utils/Style.dart';
 
+import '../Weeklysurveyreport.dart';
+import 'Addwaterplant.dart';
 import 'Newcomplaint.dart';
+import 'Solvedcomplaints.dart';
+import 'Unsolvedcomplaints.dart';
 List<String> activelist=[];
 
 List<String> dashboarditemsPDO = [
@@ -14,7 +18,8 @@ List<String> dashboarditemsPDO = [
   "ವಾರಕ್ಕೊಮ್ಮೆ ಘಟಕದ ಸ್ಥಿತಿ \nದಾಖಲಿಸಿದ ವಿವರ",
   "ದೂರು ದಾಖಲಿಸು",
   "ಬಾಕಿ ಇರುವ ದೂರುಗಳ ವಿವರ",
-  "ಪರಿಹರಿಸಿರುವ ದೂರುಗಳ ವಿವರ"
+  "ಪರಿಹರಿಸಿರುವ ದೂರುಗಳ ವಿವರ",
+  "ನೀರಿನ ಘಾಟಕಾ ಸೇರಿಸಿ"
 ];
 
 List<String> dashboarditemsCEO = [
@@ -76,7 +81,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Weeklysurveyreport(),
+                                builder: (context) => Weeklysurveyreport(),
                               ),
                             );
                           }
@@ -85,7 +90,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Newcomplaint(),
+                                builder: (context) => Weeklysurvey(),
                               ),
                             );
                           }
@@ -94,7 +99,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Unsolvedcomplaints(),
+                                builder: (context) => Unsolvedcomplaints(),
                               ),
                             );
                           }
@@ -103,7 +108,16 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Solvedcomplaints(),
+                                builder: (context) => Solvedcomplaints(),
+                              ),
+                            );
+                          }
+                          if(index==5){
+                            print("5");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Addwaterplant(),
                               ),
                             );
                           }
@@ -123,7 +137,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Unsolvedcomplaints(),
+                                builder: (context) => Unsolvedcomplaints(),
                               ),
                             );
                           }
@@ -132,7 +146,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Solvedcomplaints(),
+                                builder: (context) => Solvedcomplaints(),
                               ),
                             );
                           }
@@ -143,7 +157,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Solvedcomplaints(),
+                                builder: (context) => Solvedcomplaints(),
                               ),
                             );
                           }
@@ -152,7 +166,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Unsolvedcomplaints(),
+                                builder: (context) => Unsolvedcomplaints(),
                               ),
                             );
                           }
@@ -173,7 +187,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Weeklysurveyreport(),
+                                builder: (context) => Weeklysurveyreport(),
                               ),
                             );
                           }
@@ -182,7 +196,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => Newcomplaint(),
+                                builder: (context) => Weeklysurvey(),
                               ),
                             );
                           }
@@ -191,7 +205,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Unsolvedcomplaints(),
+                                builder: (context) => Unsolvedcomplaints(),
                               ),
                             );
                           }
@@ -200,7 +214,7 @@ Widget SDDashboard(BuildContext context, String selection) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                // builder: (context) => Solvedcomplaints(),
+                                builder: (context) => Solvedcomplaints(),
                               ),
                             );
                           }

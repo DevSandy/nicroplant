@@ -5,12 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nic_ro_plant_project/Modelclasses/Loginmodel.dart';
 import 'package:nic_ro_plant_project/Screens/Home/SDDashboardScreen.dart';
+import 'package:nic_ro_plant_project/Screens/SDHomePageScreen.dart';
 import 'package:nic_ro_plant_project/Utils/Colors.dart';
 import 'package:nic_ro_plant_project/Utils/Style.dart';
 import 'package:http/http.dart' as http;
+import 'package:nic_ro_plant_project/Utils/Variables.dart';
 import 'package:nic_ro_plant_project/Utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'SDHomePageScreen.dart';
+
+import 'citizenscreen.dart';
+
 
 class SDLoginScreen extends StatefulWidget {
   @override
@@ -181,7 +185,7 @@ class _SDLoginScreenState extends State<SDLoginScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        // builder: (context) => sdRegisterScreen(),
+                        builder: (context) => citizenscreen(),
                       ),
                     );
                   },
@@ -217,13 +221,16 @@ class _SDLoginScreenState extends State<SDLoginScreen> {
     if (response.statusCode == 200) {
       if(Loginmodel.fromJson(jsonDecode(response.body)).msg[0].statuslogin==true){
         prefs.setString('username', username);
+        Variables.username=username;
+        Variables.role=role;
         prefs.setString('password', password);
         prefs.setString('role', role);
         prefs.setString('distrct', Loginmodel.fromJson(jsonDecode(response.body)).msg[0].district);
         prefs.setString('taluk', Loginmodel.fromJson(jsonDecode(response.body)).msg[0].taluk);
         prefs.setString('panchayat', Loginmodel.fromJson(jsonDecode(response.body)).msg[0].panchayt);
         prefs.setString('uid', Loginmodel.fromJson(jsonDecode(response.body)).msg[0].uid.toString());
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SDDashboard(context, role)));
+        prefs.setBool('islogedin', true);
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => SDHomePageScreen( role)));
       }else{
         Fluttertoast.showToast(
             msg: "Login failed",

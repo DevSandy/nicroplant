@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geo_location_finder/geo_location_finder.dart';
+import 'package:geolocation/geolocation.dart';
 import 'package:nic_ro_plant_project/Modelclasses/Weeklysurveymodel.dart';
 import 'package:nic_ro_plant_project/Utils/Variables.dart';
 import 'package:nic_ro_plant_project/Utils/constants.dart';
@@ -19,6 +19,8 @@ class Weeklysurvey extends StatefulWidget {
 class _WeeklysurveyState extends State<Weeklysurvey> {
 
   String _selectedId;
+  String latitude = '00.00000';
+  String longitude = '00.00000';
 
   Future<Weeklysurveymodel> futureAlbum;
   List<village> villages = [];
@@ -27,7 +29,7 @@ class _WeeklysurveyState extends State<Weeklysurvey> {
   void initState() {
     super.initState();
     futureAlbum = getweeklysurvellist();
-    _getLocation();
+    _getCurrentLocation();
 
   }
 
@@ -246,37 +248,23 @@ class _WeeklysurveyState extends State<Weeklysurvey> {
 
   }
 
-  Future<void> _getLocation() async {
-    Map<dynamic, dynamic> locationMap;
+  _getCurrentLocation() async {
+    Geolocation.enableLocationServices().then((result) {
+      // Request location
+      // print(result);
+    }).catchError((e) {
+      // Location Services Enablind Cancelled
+      // print(e);
+    });
 
-    String result;
-
-    try {
-      locationMap = await GeoLocation.getLocation;
-      var status = locationMap["status"];
-      if ((status is String && status == "true") ||
-          (status is bool) && status) {
-        var lat = locationMap["latitude"];
-        var lng = locationMap["longitude"];
-
-        if (lat is String) {
-          result = "Location: ($lat, $lng)";
-        } else {
-          // lat and lng are not string, you need to check the data type and use accordingly.
-          // it might possible that else will be called in Android as we are getting double from it.
-          result = "Location: ($lat, $lng)";
-        }
-      } else {
-        result = locationMap["message"];
+    Geolocation.currentLocation(accuracy: LocationAccuracy.best)
+        .listen((result) {
+      if (result.isSuccessful) {
+        setState(() {
+          Variables.latitude = result.location.latitude.toString();
+          Variables.longitude = result.location.longitude.toString();
+        });
       }
-    } on PlatformException {
-      result = 'Failed to get location';
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      Variables.result = result;
     });
   }
 
@@ -285,9 +273,10 @@ class village {
   String name;
   String plantname;
   String plantid;
+  int ticketid;
   bool reportstatus;
 
-  village({this.name,this.plantname,this.reportstatus,this.plantid});
+  village({this.name,this.plantname,this.reportstatus,this.plantid,this.ticketid});
 }
 
 class MyDialog extends StatefulWidget {
@@ -374,8 +363,7 @@ class MyDialogState extends State<MyDialog> {
     );
   }
 
-  Future<void> hitapitopostissue(String villagename, String plantname, String plantid, String issue) async {
-    var location = Variables.result;
+  Future<void> hitapitopostissue(String plantid, String plantname, String villagename, String issue) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final response =
@@ -388,15 +376,15 @@ class MyDialogState extends State<MyDialog> {
         "issue_type" : issue,
         "createdby" : prefs.getString('uid'),
         "plant_name" : plantname,
-        "lattitude" : location,
-        "longitude" : location,
+        "lattitude" : Variables.latitude,
+        "longitude" : Variables.longitude,
         "plantid" : plantid
       }),
     );
     print(response.body.toString());
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "Successfully created issue",
+          msg: "Issue created",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,

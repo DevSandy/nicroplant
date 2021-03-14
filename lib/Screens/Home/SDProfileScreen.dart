@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:nic_ro_plant_project/Screens/SDLoginScreen.dart';
 import 'package:nic_ro_plant_project/Utils/Colors.dart';
 import 'package:nic_ro_plant_project/Utils/Style.dart';
+import 'package:nic_ro_plant_project/Utils/Variables.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class sdPRofileScreen extends StatefulWidget {
@@ -12,6 +15,8 @@ class sdPRofileScreen extends StatefulWidget {
 class _sdPRofileScreenState extends State<sdPRofileScreen> {
   // List<charts.Series<Task, String>> _taskPieData;
 
+  final usernamecontroller = TextEditingController();
+  final passwordcontroller = TextEditingController();
   _generateData() {
     var taskData = [
       Task(task: 'Completed', value: 82.0, color: Colors.blue),
@@ -38,6 +43,7 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     changeStatusColor(sdPrimaryColor);
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
@@ -58,11 +64,23 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                     margin: EdgeInsets.only(right: 10),
                     alignment: Alignment.topRight,
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                        prefs.setString('username', "");
+                        Variables.username="";
+                        Variables.role="";
+                        prefs.setString('password', "");
+                        prefs.setString('role', "");
+                        prefs.setString('distrct', "");
+                        prefs.setString('taluk', "");
+                        prefs.setString('panchayat', "");
+                        prefs.setString('uid', "");
+                        prefs.setBool('islogedin', null);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            // builder: (context) => SDSettingScreen(),
+                            builder: (context) => SDLoginScreen(),
                           ),
                         );
                       },
@@ -78,64 +96,39 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                     ),
                     height: 80,
                     width: 80,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(40),
-                      child: FadeInImage(
-                        fit: BoxFit.cover,
-                        placeholder: AssetImage(
-                          'Loading',
-                        ),
-                        image: Image.network(
-                          'https://i.insider.com/5de6dd81fd9db241b00c04d3?width=1100&format=jpeg&auto=webp',
-                          height: 35,
-                          width: 10,
-                        ).image,
-                      ),
-                    ),
+                    // child: ClipRRect(
+                    //   borderRadius: BorderRadius.circular(40),
+                    //   child: FadeInImage(
+                    //     fit: BoxFit.cover,
+                    //     placeholder: AssetImage(
+                    //       'Loading',
+                    //     ),
+                    //     // image: Image.network(
+                    //     //   'https://i.insider.com/5de6dd81fd9db241b00c04d3?width=1100&format=jpeg&auto=webp',
+                    //     //   height: 35,
+                    //     //   width: 10,
+                    //     // ).image,
+                    //   ),
+                    // ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 20),
                     child: Text(
-                      'Mark Paul',
+                      Variables.username,
                       style: boldTextStyle(textColor: Colors.white),
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.only(top: 10),
                     child: Text(
-                      'Senior High School - 12th Grade',
+                      Variables.role,
                       style: secondaryTextStyle(
                         size: 12,
                         textColor: Colors.white.withOpacity(0.7),
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          // builder: (context) => SDEditProfileScreen(),
-                        ),
-                      );
-                    },
-                    child: FittedBox(
-                      child: Container(
-                        margin: EdgeInsets.only(top: 20),
-                        padding: EdgeInsets.fromLTRB(10, 4, 10, 4),
-                        decoration: boxDecorations(
-                          radius: 4,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Edit Profile',
-                            style: boldTextStyle(
-                                size: 12, textColor: sdPrimaryColor),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+
                 ],
               ),
             ),
@@ -163,7 +156,7 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Highest Score',
+                            'Solved',
                             style: boldTextStyle(
                                 textColor: Colors.black, size: 14),
                           ),
@@ -180,12 +173,7 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            'Chemist',
-                            style: secondaryTextStyle(
-                                textColor: Colors.grey.withOpacity(0.7),
-                                size: 14),
-                          ),
+
                         ],
                       ),
                     ),
@@ -211,7 +199,7 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            'Lowest Score',
+                            'Unsolved',
                             style: boldTextStyle(
                                 textColor: Colors.black, size: 14),
                           ),
@@ -229,12 +217,7 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                           SizedBox(
                             height: 10,
                           ),
-                          Text(
-                            'Maths',
-                            style: secondaryTextStyle(
-                                textColor: Colors.grey.withOpacity(0.7),
-                                size: 14),
-                          ),
+
                         ],
                       ),
                     ),
@@ -259,77 +242,100 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
                     Row(
                       children: <Widget>[
                         Expanded(
-                          child: Text('Completion Rate',
+                          child: Text('Change password',
                               style: boldTextStyle(size: 16)),
                         ),
-                        Container(
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton(
-                              value: 'Monthly',
-                              items: <String>[
-                                'Daily',
-                                'Weekly',
-                                'Monthly',
-                                'Yearly'
-                              ].map((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(
-                                    value,
-                                    style: boldTextStyle(size: 16),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                });
-                              },
-                            ),
-                          ),
-                        )
+
+
                       ],
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        // Expanded(
-                        //   child: Container(
-                        //     height: 150,
-                        //     width: 100,
-                        //     decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(20)),
-                        //     child: charts.PieChart(
-                        //       _taskPieData,
-                        //       animate: true,
-                        //       animationDuration: Duration(seconds: 1),
-                        //       behaviors: [
-                        //         charts.DatumLegend(
-                        //           position: charts.BehaviorPosition.end,
-                        //           outsideJustification: charts
-                        //               .OutsideJustification.middleDrawArea,
-                        //           horizontalFirst: false,
-                        //           showMeasures: true,
-                        //           cellPadding:
-                        //               new EdgeInsets.only(right: 4.0, top: 25),
-                        //           legendDefaultMeasure:
-                        //               charts.LegendDefaultMeasure.lastValue,
-                        //           measureFormatter: (num value) {
-                        //             return value == null ? '-' : '$value%';
-                        //           },
-                        //           entryTextStyle: charts.TextStyleSpec(
-                        //             color: charts.MaterialPalette.black,
-                        //             fontSize: 16,
-                        //           ),
-                        //         )
-                        //       ],
-                        //       defaultRenderer: charts.ArcRendererConfig(
-                        //         arcWidth: 30,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
+                        Expanded(
+                          child: Container(
+                            height: 150,
+                            width: 100,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+
+                                  ],
+                                ),
+                                TextField(
+                                  controller: usernamecontroller,
+                                  cursorColor: sdTextSecondaryColor.withOpacity(0.2),
+                                  cursorWidth: 1,
+                                  autocorrect: true,
+                                  autofocus: false,
+                                  decoration: InputDecoration(
+                                    hintText: 'Old Password',
+                                    hintStyle: secondaryTextStyle(
+                                        textColor:
+                                        sdTextSecondaryColor.withOpacity(0.6)),
+                                    border: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    disabledBorder: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(
+                                        left: 16, bottom: 16, top: 16, right: 16),
+                                  ),
+                                ),
+                                Divider(
+                                  height: 1,
+                                  thickness: 1,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Flexible(
+                                      child: TextField(
+                                        controller: passwordcontroller,
+                                        obscureText: true,
+                                        cursorColor:
+                                        sdTextSecondaryColor.withOpacity(0.2),
+                                        cursorWidth: 1,
+                                        decoration: InputDecoration(
+                                          hintText: 'New Password',
+                                          hintStyle: secondaryTextStyle(
+                                            textColor:
+                                            sdTextSecondaryColor.withOpacity(0.6),
+                                          ),
+                                          border: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          errorBorder: InputBorder.none,
+                                          disabledBorder: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 16, bottom: 16, top: 16, right: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+
+                                ),
+
+                              ],
+                            ),
+
+                          ),
+                        ),
+
                       ],
+                    ),
+
+                    SizedBox(
+                      height: 45,
+                    ),
+                    SDButton(
+                      textContent: "Change",
+                      onPressed: () {
+                        // loginfun(usernamecontroller.text,passwordcontroller.text,_selection);
+                      },
                     ),
                   ],
                 ),
@@ -340,6 +346,8 @@ class _sdPRofileScreenState extends State<sdPRofileScreen> {
       ),
     );
   }
+
+
 }
 
 class Task {

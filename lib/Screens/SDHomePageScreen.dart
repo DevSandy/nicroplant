@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:nic_ro_plant_project/Screens/Home/Newcomplaint.dart';
+import 'package:nic_ro_plant_project/Screens/Weeklysurvey.dart';
 import 'package:nic_ro_plant_project/Utils/Colors.dart';
 import 'package:nic_ro_plant_project/Utils/Style.dart';
 
@@ -10,8 +11,7 @@ import 'Home/SDProfileScreen.dart';
 
 class SDHomePageScreen extends StatefulWidget {
   String selection;
-  String regionId;
-  SDHomePageScreen(this.selection, this.regionId);
+  SDHomePageScreen(this.selection,);
 
   @override
   _SDHomePageScreenState createState() => _SDHomePageScreenState(selection);
@@ -28,7 +28,7 @@ class _SDHomePageScreenState extends State<SDHomePageScreen> {
     changeStatusColor(sdAppBackground);
     final tab = [
       SDDashboard(context,selection),
-      Newcomplaint(),
+      Weeklysurvey(),
       sdPRofileScreen(),
     ];
 
